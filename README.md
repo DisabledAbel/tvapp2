@@ -155,45 +155,57 @@ For the [environment variables](#environment-variables), you may specify these i
 #### Environment Variables
 
 The following is a list of environment variables you can declare within your `docker-compose.yml` or docker run command:
+import { useState } from 'react';
 
-<br />
+const envVars = [
+  { name: 'TZ', value: 'Etc/UTC', description: 'Timezone for error / log reporting' },
+  { name: 'WEB_IP', value: '0.0.0.0', description: 'IP to use for webserver' },
+  { name: 'WEB_PORT', value: '4124', description: 'Port to use for webserver' },
+  { name: 'WEB_FOLDER', value: 'www', description: 'Internal container folder for web files' },
+  { name: 'WEB_ENCODING', value: 'deflate, br', description: 'HTTP Accept-Encoding compression (gzip may break Jellyfin)' },
+  { name: 'WEB_PROXY_HEADER', value: 'x-forwarded-for', description: 'Header used to get client IP behind proxies' },
+  { name: 'URL_REPO', value: 'https://git.binaryninja.net/BinaryNinja/', description: 'M3U + EPG data source URL (do not change)' },
+  { name: 'FILE_URL', value: 'urls.txt', description: 'Filename for urls.txt cache file' },
+  { name: 'FILE_M3U', value: 'playlist.m3u8', description: 'Filename for M3U playlist file' },
+  { name: 'FILE_EPG', value: 'xmltv.xml', description: 'Filename for XML EPG guide file' },
+  { name: 'FILE_GZP', value: 'xmltv.xml.gz', description: 'Filename for gzip-compressed XML guide file' },
+  { name: 'STREAM_QUALITY', value: 'hd', description: 'Stream quality: `hd` or `sd`' },
+  { name: 'TASK_CRON_SYNC', value: '0 0 */3 * *', description: 'How often to refresh IPTV data' },
+  { name: 'HEALTH_TIMER', value: '600000', description: 'Health check interval in ms' },
+  { name: 'DIR_BUILD', value: '/usr/src/app', description: 'Internal build folder (do not change)' },
+  { name: 'DIR_RUN', value: '/usr/bin/app', description: 'Internal run folder (do not change)' },
+  { name: 'LOG_LEVEL', value: '4', description: 'Logging level (0–5)' },
+];
 
-> [!CAUTION]  
-> Do **not** add `"` quotation marks to environment variables.
->
-> ✔️ Correct
-> ```yml
-> environment:
->    - TASK_CRON_SYNC=*/60 * * * *
-> ```
->
-> ❌ Incorrect
-> ```yml
-> environment:
->    - TASK_CRON_SYNC="*/60 * * * *"
-> ```
+export default function EnvVarList() {
+  const [copied, setCopied] = useState(null);
 
-<br />
+  const handleCopy = async (envName, envValue) => {
+    await navigator.clipboard.writeText(`${envName}=${envValue}`);
+    setCopied(envName);
+    setTimeout(() => setCopied(null), 2000);
+  };
 
-| Env Var | Default | Description |
-| --- | --- | --- |
-| `TZ` | `Etc/UTC` | Timezone for error / log reporting |
-| `WEB_IP` | `0.0.0.0` | IP to use for webserver |
-| `WEB_PORT` | `4124` | Port to use for webserver |
-| `WEB_FOLDER` | `www` | Internal container folder to keep TVApp2 web files in. <br /><br /> <sup>⚠️ This should not be used unless you know what you're doing</sup> |
-| `WEB_ENCODING` | `deflate, br` | Defines the HTTP `Accept-Encoding` request and response header. This value specifies what content encoding the sender can understand<br /><br />Gzip compression can be enabled by specifying `'gzip, deflate, br'`, however, [it may break Jellyfin users](#build-error-err-27-jellyfinlivetvguideguidemanager-error-getting-programs-for-channel-xxxxxxxxxxxxxxx-source-2-systemxmlxmlexception--hexadecimal-value-0x1f-is-an-invalid-character-line-1-position-1). |
-| `WEB_PROXY_HEADER` | `x-forwarded-for` | Defines the header to look for when finding a client's IP address. Used to get a client's IP when behind a reverse proxy or Cloudflare |
-| `URL_REPO` | `https://git.binaryninja.net/BinaryNinja/` | Determines where the data files will be downloaded from. Do not change this or you will be unable to get M3U and EPG data. |
-| `FILE_URL` | `urls.txt` | Filename for `urls.txt` cache file |
-| `FILE_M3U` | `playlist.m3u8` | Filename for M3U playlist file |
-| `FILE_EPG` | `xmltv.xml` | Filename for XML guide data file |
-| `FILE_GZP` | `xmltv.xml.gz` | Filename for XML compressed as gzip .gz |
-| `STREAM_QUALITY` | `hd` | Stream quality<br />Can be either `hd` or `sd` |
-| `TASK_CRON_SYNC` | `0 0 */3 * *` | Defines how often to refresh the M3U and XML IPTV data |
-| `HEALTH_TIMER` | `600000` | How often (in milliseconds) to run a health check |
-| `DIR_BUILD` | `/usr/src/app` | Path inside container where TVApp2 will be built. <br /><br /> <sup>⚠️ This should not be used unless you know what you're doing</sup> |
-| `DIR_RUN` | `/usr/bin/app` | Path inside container where TVApp2 will be placed after it is built <br /><br /> <sup>⚠️ This should not be used unless you know what you're doing</sup> |
-| `LOG_LEVEL` | `4` | Level of logging to display in console<br/>`7` Trace <sup><sub>& below</sub></sup><br />`6` Verbose <sup><sub>& below</sub></sup><br />`5` Debug <sup><sub>& below</sub></sup><br />`4` Info <sup><sub>& below</sub></sup><br />`3` Notice <sup><sub>& below</sub></sup><br />`2` Warn <sup><sub>& below</sub></sup><br />`1` Error <sup><sub>only</sub></sup> |
+  return (
+    <div className="space-y-4">
+      {envVars.map(({ name, value, description }) => (
+        <div key={name} className="relative bg-zinc-900 text-white p-4 rounded-xl">
+          <code className="block text-sm">
+            <strong>{name}</strong>=<span>{value}</span>
+          </code>
+          <p className="text-xs text-gray-400 mt-1">{description}</p>
+          <button
+            onClick={() => handleCopy(name, value)}
+            className="absolute top-2 right-2 text-xs bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded"
+          >
+            {copied === name ? 'Copied!' : 'Copy'}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 
 <br />
 <br />
