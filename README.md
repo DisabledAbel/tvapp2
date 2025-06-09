@@ -177,9 +177,75 @@ const envVars = [
   { name: 'TASK_CRON_SYNC', value: '0 0 */3 * *', description: 'How often to refresh IPTV data' },
   { name: 'HEALTH_TIMER', value: '600000', description: 'Health check interval in ms' },
   { name: 'DIR_BUILD', value: '/usr/src/app', description: 'Internal build folder (do not change)' },
+  { name: 'DIR_RUN', value: '/usr/bin/app', description: '|
+  import { useState } from 'react';
+
+const envVars = [
+  { name: 'TZ', value: 'Etc/UTC', description: 'Timezone for error / log reporting' },
+  { name: 'WEB_IP', value: '0.0.0.0', description: 'IP to use for webserver' },
+  { name: 'WEB_PORT', value: '4124', description: 'Port to use for webserver' },
+  { name: 'WEB_FOLDER', value: 'www', description: 'Internal container folder for web files' },
+  { name: 'WEB_ENCODING', value: 'deflate, br', description: 'HTTP Accept-Encoding compression (gzip may break Jellyfin)' },
+  { name: 'WEB_PROXY_HEADER', value: 'x-forwarded-for', description: 'Header used to get client IP behind proxies' },
+  { name: 'URL_REPO', value: 'https://git.binaryninja.net/BinaryNinja/', description: 'M3U + EPG data source URL (do not change)' },
+  { name: 'FILE_URL', value: 'urls.txt', description: 'Filename for urls.txt cache file' },
+  { name: 'FILE_M3U', value: 'playlist.m3u8', description: 'Filename for M3U playlist file' },
+  { name: 'FILE_EPG', value: 'xmltv.xml', description: 'Filename for XML EPG guide file' },
+  { name: 'FILE_GZP', value: 'xmltv.xml.gz', description: 'Filename for gzip-compressed XML guide file' },
+  { name: 'STREAM_QUALITY', value: 'hd', description: 'Stream quality: `hd` or `sd`' },
+  { name: 'TASK_CRON_SYNC', value: '0 0 */3 * *', description: 'How often to refresh IPTV data' },
+  { name: 'HEALTH_TIMER', value: '600000', description: 'Health check interval in ms' },
+  { name: 'DIR_BUILD', value: '/usr/src/app', description: 'Internal build folder (do not change)' },
   { name: 'DIR_RUN', value: '/usr/bin/app', description: 'Internal run folder (do not change)' },
   { name: 'LOG_LEVEL', value: '4', description: 'Logging level (0–5)' },
 ];
+
+export default function EnvVarList() {
+  const [copied, setCopied] = useState(null);
+
+  const handleCopy = (text, envName) => {
+    // Create a textarea element for copying
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.setAttribute("readonly", "");
+    textArea.style.position = "absolute";
+    textArea.style.left = "-9999px";
+
+    document.body.appendChild(textArea);
+    textArea.select();
+
+    const success = document.execCommand("copy");
+    document.body.removeChild(textArea);
+
+    if (success) {
+      setCopied(envName);
+      setTimeout(() => setCopied(null), 2000);
+    } else {
+      alert("Copy failed. Please copy manually.");
+    }
+  };
+
+  return (
+    <div className="space-y-4 p-4">
+      {envVars.map(({ name, value, description }) => (
+        <div key={name} className="relative bg-zinc-900 text-white p-4 rounded-xl">
+          <code className="block text-sm font-mono">
+            <strong>{name}</strong>=<span>{value}</span>
+          </code>
+          <p className="text-xs text-gray-400 mt-1">{description}</p>
+          <button
+            onClick={() => handleCopy(`${name}=${value}`, name)}
+            className="absolute top-2 right-2 text-xs bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded"
+            aria-label={`Copy ${name} to clipboard`}
+          >
+            {copied === name ? 'Copied!' : 'Copy'}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 
 export default function EnvVarList() {
   const [copied, setCopied] = useState(null);
