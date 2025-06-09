@@ -24,87 +24,94 @@
 
 <div align="center">
 
-[![View](https://img.shields.io/discord/1340814107124830229?style=for-the-badge&color=de1f68)](https://discord.gg/gTze6hRe)[![View](https://img.shields.io/badge/Join%20Discord-2d5e97?style=for-the-badge&logo=discord&logoColor=FFFFFF)](https://discord.gg/HGv4eGr2kg)
-<button
-  aria-label={`Copy ${name} environment variable`}
-  ...
+[![View](https://img.shields.io/discord/1340814107124830229?style=for-the-badge&color=de1f68)](https://discord.gg/gTze6hRe)[![View](https://img.shields.io/badge/Join%20Discord-2d5e97?style=for-the-badge&logo=discord&logoColor=FFFFFF)](https://discord.gg/HGv4eGr2kg
+<h2>Environment Variables</h2>
 
-
-
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>TZ=Etc/UTC</code><br/>
+  <small>Timezone for error / log reporting</small>
 </div>
 
-1<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>iPad Clipboard Test</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #111;
-      color: #fff;
-      padding: 20px;
-    }
-    .box {
-      background: #222;
-      padding: 12px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      position: relative;
-    }
-    .copy-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: #2563eb;
-      color: white;
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="box">
-    <code id="envText">TZ=Etc/UTC</code>
-    <button class="copy-btn" onclick="copyText('envText', this)">Copy</button>
-  </div>
-
-  <script>
-    function copyText(id, btn) {
-      const text = document.getElementById(id).innerText;
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.setAttribute('readonly', '');
-      textarea.style.position = 'absolute';
-      textarea.style.left = '-9999px';
-      document.body.appendChild(textarea);
-      textarea.select();
-
-      const successful = document.execCommand('copy');
-      document.body.removeChild(textarea);
-
-      if (successful) {
-        btn.innerText = 'Copied!';
-        setTimeout(() => btn.innerText = 'Copy', 2000);
-      } else {
-        alert('Copy failed.');
-      }
-    }
-  </script>
-
-</body>
-</html>
-
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>WEB_IP=0.0.0.0</code><br/>
+  <small>IP to use for webserver</small>
 </div>
 
-<br />
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>WEB_PORT=4124</code><br/>
+  <small>Port to use for webserver</small>
+</div>
 
----
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>WEB_FOLDER=www</code><br/>
+  <small>Internal container folder for web files</small>
+</div>
 
-<br />
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>WEB_ENCODING=deflate, br</code><br/>
+  <small>HTTP Accept-Encoding compression (gzip may break Jellyfin)</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>WEB_PROXY_HEADER=x-forwarded-for</code><br/>
+  <small>Header used to get client IP behind proxies</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>URL_REPO=https://git.binaryninja.net/BinaryNinja/</code><br/>
+  <small>M3U + EPG data source URL (do not change)</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>FILE_URL=urls.txt</code><br/>
+  <small>Filename for urls.txt cache file</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>FILE_M3U=playlist.m3u8</code><br/>
+  <small>Filename for M3U playlist file</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>FILE_EPG=xmltv.xml</code><br/>
+  <small>Filename for XML EPG guide file</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>FILE_GZP=xmltv.xml.gz</code><br/>
+  <small>Filename for gzip-compressed XML guide file</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>STREAM_QUALITY=hd</code><br/>
+  <small>Stream quality: <code>hd</code> or <code>sd</code></small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>TASK_CRON_SYNC=0 0 */3 * *</code><br/>
+  <small>How often to refresh IPTV data</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>HEALTH_TIMER=600000</code><br/>
+  <small>Health check interval in ms</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>DIR_BUILD=/usr/src/app</code><br/>
+  <small>Internal build folder (do not change)</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>DIR_RUN=/usr/bin/app</code><br/>
+  <small>Internal run folder (do not change)</small>
+</div>
+
+<div style="background:#1e1e1e;padding:1em;margin-bottom:1em;border-radius:8px;color:white">
+  <code>LOG_LEVEL=4</code><br/>
+  <small>Logging level (0–5)</small>
+</div>
+
 
 - [About](#about)
   - [Quick Install](#quick-install)
