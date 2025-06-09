@@ -158,7 +158,7 @@ For the [environment variables](#environment-variables), you may specify these i
 
 #### Environment Variables
 
-The following is a list of environment variables you can declare within your `docker-compose.yml` or docker run command:
+The following is a list of environment variables you can declare within your `docker-compose.yml` or do
 import { useState } from 'react';
 
 const envVars = [
@@ -184,23 +184,50 @@ const envVars = [
 export default function EnvVarList() {
   const [copied, setCopied] = useState(null);
 
-  const handleCopy = async (envName, envValue) => {
-    await navigator.clipboard.writeText(`${envName}=${envValue}`);
-    setCopied(envName);
-    setTimeout(() => setCopied(null), 2000);
+  const handleCopy = (envName, envValue) => {
+    const text = `${envName}=${envValue}`;
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+
+    // Style it to be invisible and off-screen
+    textArea.style.position = "fixed";
+    textArea.style.top = 0;
+    textArea.style.left = 0;
+    textArea.style.width = "1px";
+    textArea.style.height = "1px";
+    textArea.style.opacity = "0";
+
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopied(envName);
+        setTimeout(() => setCopied(null), 2000);
+      } else {
+        alert("Copy failed");
+      }
+    } catch (err) {
+      alert("Error: " + err);
+    }
+
+    document.body.removeChild(textArea);
   };
 
   return (
     <div className="space-y-4">
       {envVars.map(({ name, value, description }) => (
         <div key={name} className="relative bg-zinc-900 text-white p-4 rounded-xl">
-          <code className="block text-sm">
+          <code className="block text-sm font-mono">
             <strong>{name}</strong>=<span>{value}</span>
           </code>
           <p className="text-xs text-gray-400 mt-1">{description}</p>
           <button
             onClick={() => handleCopy(name, value)}
             className="absolute top-2 right-2 text-xs bg-blue-600 hover:bg-blue-700 text-white py-1 px-2 rounded"
+            aria-label={`Copy ${name} to clipboard`}
           >
             {copied === name ? 'Copied!' : 'Copy'}
           </button>
@@ -210,9 +237,6 @@ export default function EnvVarList() {
   );
 }
 
-
-<br />
-<br />
 
 #### Mountable Volumes
 
